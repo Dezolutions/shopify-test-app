@@ -1,11 +1,18 @@
 import {  Heading,  Form, Button, FormLayout,TextField } from '@shopify/polaris'
 import React from 'react'
 import useStore from '../../store/store';
+
 const CustomerInfo = () => {
+  //states
   const [email, setEmail] = React.useState('');
+  
+  //handlers
   const handleEmailChange = React.useCallback(value => setEmail(value), []);
+
+  //store actions
   const  setEmaill = useStore(state =>  state.setEmail)
-  console.log('info render')
+  
+  //functions
   const onSubmit = () => {
     setEmaill(email)
   }
