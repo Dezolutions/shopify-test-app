@@ -2,6 +2,8 @@ import { Card, Heading, Layout, Page } from "@shopify/polaris";
 import CustomerInfo from "../components/CustomerInfo/CustomerInfo";
 import CustomerForm from "../components/CustomerForm/CustomerForm";
 import useStore from "../store/store";
+import ProductBlock from "../components/ProductBlock/ProductBlock";
+import DeleteProductList from "../components/DeleteProductList/DeleteProductList";
 
 const Index = () => {
   const email = useStore((state) => state.email);
@@ -18,6 +20,8 @@ const Index = () => {
           </Card>
         </Layout.Section>
       </Layout>
+      <ProductBlock />
+      <DeleteProductList />
     </Page>
   );
 };

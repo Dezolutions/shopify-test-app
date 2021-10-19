@@ -61,3 +61,90 @@ export const UPDATE_CUSTOMER_ADDRESS = gql`
     }
   }
 `;
+export const GET_PRODUCTS = gql`
+  query getAllProducts {
+    products(first: 100) {
+      edges {
+        node {
+          id
+          title
+        }
+      }
+    }
+  }
+`;
+export const GET_PRODUCTS_BY_ID = gql`
+  query getProducts($ids: [ID!]!) {
+    nodes(ids: $ids) {
+      ... on Product {
+        title
+        handle
+        id
+        variants(first: 1) {
+          edges {
+            node {
+              price
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+export const UPDATE_PRODUCT = gql`
+  mutation productUpdate($input: ProductInput!) {
+    productUpdate(input: $input) {
+      userErrors {
+        field
+        message
+      }
+      product {
+        title
+        handle
+        id
+        variants(first: 1) {
+          edges {
+            node {
+              price
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const CREATE_PRODUCT = gql`
+  mutation productCreate($input: ProductInput!) {
+    productCreate(input: $input) {
+      userErrors {
+        field
+        message
+      }
+      product {
+        title
+        handle
+        id
+        variants(first: 1) {
+          edges {
+            node {
+              price
+            }
+          }
+        }
+      }
+    }
+  }
+`;
+
+export const DELETE_PRODUCT = gql`
+  mutation productDelete($input: ProductDeleteInput!) {
+    productDelete(input: $input) {
+      userErrors {
+        field
+        message
+      }
+      deletedProductId
+    }
+  }
+`;
