@@ -114,6 +114,7 @@ export const CREATE_PRODUCT = gql`
       product {
         title
         id
+        handle
         variants(first: 1) {
           edges {
             node {
