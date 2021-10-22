@@ -68,22 +68,12 @@ export const GET_PRODUCTS = gql`
         node {
           id
           title
-        }
-      }
-    }
-  }
-`;
-export const GET_PRODUCTS_BY_ID = gql`
-  query getProducts($ids: [ID!]!) {
-    nodes(ids: $ids) {
-      ... on Product {
-        title
-        handle
-        id
-        variants(first: 1) {
-          edges {
-            node {
-              price
+          handle
+          variants(first: 1) {
+            edges {
+              node {
+                price
+              }
             }
           }
         }
@@ -123,7 +113,6 @@ export const CREATE_PRODUCT = gql`
       }
       product {
         title
-        handle
         id
         variants(first: 1) {
           edges {

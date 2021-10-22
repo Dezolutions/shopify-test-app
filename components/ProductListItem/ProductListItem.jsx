@@ -1,12 +1,15 @@
 import React from 'react'
 import { TextField,Button, Heading, Card} from '@shopify/polaris'
 import {useMutation} from '@apollo/client'
-import { UPDATE_PRODUCT } from '../../graphql/queries'
+import { UPDATE_PRODUCT, GET_PRODUCTS, DELETE_PRODUCT } from '../../graphql/queries'
 
 const ProductListItem = ({id,handle,title, variants}) => {
   
   //mutations
   const [productUpdate] = useMutation(UPDATE_PRODUCT)
+  const [productDelete] = useMutation(DELETE_PRODUCT,{refetchQueries:[
+    {query: GET_PRODUCTS}
+  ]});
 
   //states
   const [title1, setTitle] = React.useState(title)
@@ -18,7 +21,7 @@ const ProductListItem = ({id,handle,title, variants}) => {
   const handleHandle = React.useCallback(value => setHandle(value),[])
   const handlePrice = React.useCallback(value => setPrice(value),[])
 
-  
+  //submit functions
   const onSubmit = () => {
     productUpdate({variables: {
       input: {
@@ -31,6 +34,7 @@ const ProductListItem = ({id,handle,title, variants}) => {
       }
     }})
   }
+  const onDeleteSubmit = () => productDelete({variables: {input: {id: id}}});
   
 
   return (
@@ -57,7 +61,8 @@ const ProductListItem = ({id,handle,title, variants}) => {
         value={price1}
         onChange={handlePrice}
       />
-      <Button onClick={onSubmit} primary>Update</Button>
+      <Button onClick={onSubmit} >Update</Button>
+      <Button onClick={onDeleteSubmit} primary >Delete</Button>
     </Card>
   )
 }

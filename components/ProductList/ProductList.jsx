@@ -1,15 +1,12 @@
 import React from 'react'
-import {useQuery } from '@apollo/client'
-import { GET_PRODUCTS_BY_ID } from '../../graphql/queries';
-import useStore from '../../store/store'
-import { Card, Frame, ResourceItem, ResourceList,Loading, InlineError } from '@shopify/polaris';
-import ProductListItem from '../ProductListItem/ProductListItem';
-
+import {useQuery} from '@apollo/client'
+import { GET_PRODUCTS } from '../../graphql/queries';
+import { Heading, List, Frame, Loading, InlineError } from '@shopify/polaris';
+import ProductListItem from '../ProductListItem/ProductlistItem';
 
 const ProductList = () => {
-  
-  const ids = useStore(state => state.ids)
-  const { loading, error, data } = useQuery(GET_PRODUCTS_BY_ID, {variables: {ids: ids}});
+
+  const { loading, error, data } = useQuery(GET_PRODUCTS);
 
   return (
     <>
@@ -21,14 +18,13 @@ const ProductList = () => {
         </div>
       }
       {error && <InlineError message={error.message} fieldID="error1"/>}
-      {data && 
-        <ResourceList
-          resourceName={{singular: 'product', plural: 'products'}}
-          items={data.nodes}
-          renderItem={(item) => <ResourceItem><ProductListItem {...item}/></ResourceItem >
-          }
-        />
-      }
+      {data &&
+      <>
+        <Heading>Product list</Heading>
+        <List>
+          {data.products.edges.map((item) => <ProductListItem key={item.node.id} {...item.node}/>)}
+        </List>
+      </>}
     </>
   )
 }
