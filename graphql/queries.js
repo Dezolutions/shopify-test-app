@@ -23,44 +23,6 @@ export const GET_CUSTOMER = gql`
   }
 `;
 
-export const UPDATE_CUSTOMER_INFO = gql`
-  mutation customerUpdate($input: CustomerInput!) {
-    customerUpdate(input: $input) {
-      userErrors {
-        field
-        message
-      }
-      customer {
-        id
-        firstName
-        lastName
-        email
-        phone
-      }
-    }
-  }
-`;
-
-export const UPDATE_CUSTOMER_ADDRESS = gql`
-  mutation customerUpdateAddress($input: CustomerInput!) {
-    customerUpdate(input: $input) {
-      userErrors {
-        field
-        message
-      }
-      customer {
-        id
-        addresses {
-          id
-          address1
-          address2
-          city
-          country
-        }
-      }
-    }
-  }
-`;
 export const GET_PRODUCTS = gql`
   query getAllProducts {
     products(first: 100) {
@@ -81,60 +43,33 @@ export const GET_PRODUCTS = gql`
     }
   }
 `;
-export const UPDATE_PRODUCT = gql`
-  mutation productUpdate($input: ProductInput!) {
-    productUpdate(input: $input) {
-      userErrors {
-        field
-        message
-      }
-      product {
-        title
-        handle
-        id
-        variants(first: 1) {
-          edges {
-            node {
-              price
-            }
-          }
+
+export const GET_ORDERS = gql`
+  query getOrders {
+    orders(first: 100) {
+      edges {
+        node {
+          id
+          name
+          displayFulfillmentStatus
+          refundable
+          fulfillable
         }
       }
     }
   }
 `;
 
-export const CREATE_PRODUCT = gql`
-  mutation productCreate($input: ProductInput!) {
-    productCreate(input: $input) {
-      userErrors {
-        field
-        message
-      }
-      product {
-        title
-        id
-        handle
-        variants(first: 1) {
-          edges {
-            node {
-              price
-            }
-          }
+export const GET_INVENTORY = gql`
+  query inventoryItems {
+    inventoryItems(first: 100) {
+      edges {
+        node {
+          id
+          sku
+          tracked
         }
       }
-    }
-  }
-`;
-
-export const DELETE_PRODUCT = gql`
-  mutation productDelete($input: ProductDeleteInput!) {
-    productDelete(input: $input) {
-      userErrors {
-        field
-        message
-      }
-      deletedProductId
     }
   }
 `;

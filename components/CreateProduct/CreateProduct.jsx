@@ -1,12 +1,13 @@
 import { useMutation } from '@apollo/client'
-import { Button, Card, Form, FormLayout, Heading, TextField } from '@shopify/polaris'
+import { Button, Card, Form, FormLayout,Frame, Loading, Heading, TextField } from '@shopify/polaris'
 import React from 'react'
-import { CREATE_PRODUCT,GET_PRODUCTS } from '../../graphql/queries'
+import { GET_PRODUCTS } from '../../graphql/queries'
+import { CREATE_PRODUCT } from '../../graphql/mutations'
 
 const CreateProduct = () => {
 
   //mutations
-  const [productCreate] = useMutation(CREATE_PRODUCT,{refetchQueries:[
+  const [productCreate, {error, loading}] = useMutation(CREATE_PRODUCT,{refetchQueries:[
     {query: GET_PRODUCTS}
   ]})
 
@@ -37,32 +38,42 @@ const CreateProduct = () => {
   }
 
   return (
-    <Card sectioned>
-      <Heading>New product</Heading>
-      <Form>
-        <FormLayout>
-          <TextField
-            label="Title"
-            value={title}
-            type="text"
-            onChange={handleTitle}  
-          />
-          <TextField
-            label="Handle"
-            value={handle}
-            type="text"
-            onChange={handleHandle}
-          />
-          <TextField
-            label="Price"
-            value={price}
-            type="number"
-            onChange={handlePrice}
-          />
-          <Button onClick={onSubmit} primary>Create product</Button>
-        </FormLayout>
-      </Form>
-    </Card>
+    <>
+      {loading && 
+        <div style={{height: '100px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
+      {error && <InlineError message={error.message} fieldID="customerInfoError"/>}
+      <Card sectioned>
+        <Heading>New product</Heading>
+        <Form>
+          <FormLayout>
+            <TextField
+              label="Title"
+              value={title}
+              type="text"
+              onChange={handleTitle}  
+            />
+            <TextField
+              label="Handle"
+              value={handle}
+              type="text"
+              onChange={handleHandle}
+            />
+            <TextField
+              label="Price"
+              value={price}
+              type="number"
+              onChange={handlePrice}
+            />
+            <Button onClick={onSubmit} primary>Create product</Button>
+          </FormLayout>
+        </Form>
+      </Card>
+    </>
   )
 }
 

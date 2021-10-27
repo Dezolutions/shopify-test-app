@@ -1,13 +1,16 @@
 import React from 'react'
-import { TextField,Button, Heading, Card} from '@shopify/polaris'
+import { TextField,Button, Heading, Card, InlineError} from '@shopify/polaris'
 import {useMutation} from '@apollo/client'
-import { UPDATE_PRODUCT, GET_PRODUCTS, DELETE_PRODUCT } from '../../graphql/queries'
+import { GET_PRODUCTS } from '../../graphql/queries'
+import { UPDATE_PRODUCT,DELETE_PRODUCT } from '../../graphql/mutations'
 
 const ProductListItem = ({id,handle,title, variants}) => {
   
   //mutations
-  const [productUpdate] = useMutation(UPDATE_PRODUCT)
-  const [productDelete] = useMutation(DELETE_PRODUCT,{refetchQueries:[
+  const [productUpdate, {error:updateError}] = useMutation(UPDATE_PRODUCT,{refetchQueries:[
+    {query: GET_PRODUCTS}
+  ]});
+  const [productDelete, {error:deleteError}] = useMutation(DELETE_PRODUCT,{refetchQueries:[
     {query: GET_PRODUCTS}
   ]});
 
@@ -39,6 +42,8 @@ const ProductListItem = ({id,handle,title, variants}) => {
 
   return (
     <Card sectioned>
+      {updateError && <InlineError message={updateError.message} fieldID="updateProductError"/>}
+      {deleteError && <InlineError message={deleteError.message} fieldID="deleteProductError"/>}
       <Heading>{title}</Heading>
       <TextField 
         type="text" 

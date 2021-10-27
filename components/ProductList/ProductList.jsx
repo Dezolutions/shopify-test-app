@@ -17,7 +17,7 @@ const ProductList = () => {
           </Frame>
         </div>
       }
-      {error && <InlineError message={error.message} fieldID="error1"/>}
+      {error && <InlineError message={error.message} fieldID="ProductQueryError"/>}
       {data &&
       <>
         <Heading>Product list</Heading>

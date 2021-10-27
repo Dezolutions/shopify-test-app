@@ -1,9 +1,10 @@
 import React from 'react'
 import {useQuery, useMutation} from '@apollo/client'
-import { GET_CUSTOMER, UPDATE_CUSTOMER_INFO } from '../../graphql/queries';
+import { GET_CUSTOMER  } from '../../graphql/queries';
+import { UPDATE_CUSTOMER_INFO } from '../../graphql/mutations'
 import useStore from '../../store/store';
 import CustomerAddress from '../CustomerAddress/CustomerAddress'
-import { Button, DisplayText, Form, TextField } from '@shopify/polaris';
+import { Button, DisplayText, Form, TextField, Frame,Loading, InlineError } from '@shopify/polaris';
 
 const CustomerInfo = () => {
 
@@ -12,7 +13,7 @@ const CustomerInfo = () => {
 
   //queries and mutations
   const { loading, error, data } = useQuery(GET_CUSTOMER, {variables:{email: emailData}});
-  const [customerUpdate] = useMutation(UPDATE_CUSTOMER_INFO)
+  const [customerUpdate, { error:mutationError }] = useMutation(UPDATE_CUSTOMER_INFO)
 
   //states
   const customerId = data?.customers.edges[0].node.id || ''
@@ -23,7 +24,7 @@ const CustomerInfo = () => {
 
   
 
-  //update customer info mutation
+  //submit functions
   const onSubmit = () => {
     customerUpdate({variables: {input:{id: customerId,firstName: name, lastName: lastName, email: email, phone: number}}})
   }
@@ -42,14 +43,21 @@ const CustomerInfo = () => {
   const handleEmail = React.useCallback((value) => setEmail(value),[]);
   const handleNumber = React.useCallback((value) => setNumber(value),[]);
 
-  //render variants
-  if(loading) return <DisplayText size="small">Loading...</DisplayText>
-  if(error) return <DisplayText size="small">{error.message}</DisplayText>
   return (
     <>
-      <DisplayText size="small">Result:</DisplayText>
-      <Form>
-        {data && <>
+      {loading && 
+        <div style={{height: '100px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
+      {error && <InlineError message={error.message} fieldID="customerQueryInfoError"/>}
+      {mutationError && <InlineError message={mutationError.message} fieldID="customerMutInfoError"/>}
+      {data &&
+      <>
+        <DisplayText size="small">Result:</DisplayText>
+        <Form>
           <TextField
             value={name}
             label="Name"
@@ -80,13 +88,11 @@ const CustomerInfo = () => {
           />
           <Button onClick={onSubmit} primary>Update</Button>
           <DisplayText size="small">Addresses:</DisplayText>
-
           {data.customers.edges[0].node.addresses.map(item => 
             <CustomerAddress key={item.id} customerId={customerId} {...item}/>
           )}
-          
-        </>}
-      </Form>
+        </Form>
+      </>}
     </>
   )
 }

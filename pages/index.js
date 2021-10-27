@@ -4,6 +4,8 @@ import CustomerForm from "../components/CustomerForm/CustomerForm";
 import useStore from "../store/store";
 import ProductList from "../components/ProductList/ProductList";
 import CreateProduct from "../components/CreateProduct/CreateProduct";
+import OrderList from "../components/OrderList/OrderList";
+import InventoryList from "../components/InventoryList/InventoryList";
 
 const Index = () => {
   const email = useStore((state) => state.email);
@@ -22,6 +24,8 @@ const Index = () => {
       </Layout>
       <CreateProduct />
       <ProductList />
+      <OrderList />
+      <InventoryList />
     </Page>
   );
 };

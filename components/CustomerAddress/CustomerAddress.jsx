@@ -1,7 +1,8 @@
 import { Button,TextField } from '@shopify/polaris'
 import React from 'react'
 import {useMutation} from '@apollo/client'
-import { UPDATE_CUSTOMER_ADDRESS } from '../../graphql/queries'
+import { UPDATE_CUSTOMER_ADDRESS } from '../../graphql/mutations'
+
 const CustomerAddress = ({city,address1, address2, country, id,customerId}) => {
   
   //states
@@ -16,8 +17,10 @@ const CustomerAddress = ({city,address1, address2, country, id,customerId}) => {
   const handleCity = React.useCallback((value) => setCity(value),[]);
   const handleCountry = React.useCallback((value) => setCountry(value),[]);
   
+  //mutations
   const [customerUpdateAddress] = useMutation(UPDATE_CUSTOMER_ADDRESS)
 
+  //submit functions
   const onSubmit = () => {
     customerUpdateAddress({variables: 
       {input:
