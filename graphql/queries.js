@@ -51,9 +51,13 @@ export const GET_ORDERS = gql`
         node {
           id
           name
-          displayFulfillmentStatus
+          email
           refundable
-          fulfillable
+          netPaymentSet {
+            shopMoney {
+              amount
+            }
+          }
         }
       }
     }

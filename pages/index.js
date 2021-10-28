@@ -6,6 +6,7 @@ import ProductList from "../components/ProductList/ProductList";
 import CreateProduct from "../components/CreateProduct/CreateProduct";
 import OrderList from "../components/OrderList/OrderList";
 import InventoryList from "../components/InventoryList/InventoryList";
+import CreateOrder from "../components/CreateOrder/CreateOrder";
 
 const Index = () => {
   const email = useStore((state) => state.email);
@@ -24,6 +25,7 @@ const Index = () => {
       </Layout>
       <CreateProduct />
       <ProductList />
+      <CreateOrder />
       <OrderList />
       <InventoryList />
     </Page>

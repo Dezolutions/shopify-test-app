@@ -1,13 +1,13 @@
 import React from 'react'
 import {useQuery} from '@apollo/client'
 import { GET_ORDERS } from '../../graphql/queries'
-import { Card, ResourceList, ResourceItem, Heading } from '@shopify/polaris'
+import { Card, ResourceList, ResourceItem, Heading, InlineError } from '@shopify/polaris'
 import OrderItem from '../OrderItem/OrderItem'
 
 const OrderList = () => {
 
   const {data,error} = useQuery(GET_ORDERS)
-
+  
   return (
     <>
       <Heading>Order list</Heading>

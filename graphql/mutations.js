@@ -107,6 +107,38 @@ export const CREATE_REFUND = gql`
       order {
         id
       }
+      refund {
+        id
+      }
+    }
+  }
+`;
+
+export const UPDATE_ORDER = gql`
+  mutation orderUpdate($input: OrderInput!) {
+    orderUpdate(input: $input) {
+      userErrors {
+        field
+        message
+      }
+      order {
+        id
+        email
+      }
+    }
+  }
+`;
+
+export const DRAFT_ORDER_CREATE = gql`
+  mutation draftOrderCreate($input: DraftOrderInput!) {
+    draftOrderCreate(input: $input) {
+      userErrors {
+        field
+        message
+      }
+      draftOrder {
+        id
+      }
     }
   }
 `;

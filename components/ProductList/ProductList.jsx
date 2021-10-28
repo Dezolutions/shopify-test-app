@@ -2,7 +2,7 @@ import React from 'react'
 import {useQuery} from '@apollo/client'
 import { GET_PRODUCTS } from '../../graphql/queries';
 import { Heading, List, Frame, Loading, InlineError } from '@shopify/polaris';
-import ProductListItem from '../ProductListItem/ProductlistItem';
+import ProductListItem from '../ProductListItem/ProductListItem'
 
 const ProductList = () => {
 
