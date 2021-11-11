@@ -1,15 +1,22 @@
 import React from 'react'
 import {useQuery} from '@apollo/client'
 import { GET_ORDERS } from '../../graphql/queries'
-import { Card, ResourceList, ResourceItem, Heading, InlineError } from '@shopify/polaris'
+import { Card, ResourceList, ResourceItem, Heading, InlineError, Frame, Loading } from '@shopify/polaris'
 import OrderItem from '../OrderItem/OrderItem'
 
 const OrderList = () => {
 
-  const {data,error} = useQuery(GET_ORDERS)
+  const {data,error, loading} = useQuery(GET_ORDERS)
   
   return (
     <>
+      {loading && 
+        <div style={{height: '100px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
       <Heading>Order list</Heading>
       {error && <InlineError message={error.message} fieldID="OrderQueryError"/>}
       {data &&

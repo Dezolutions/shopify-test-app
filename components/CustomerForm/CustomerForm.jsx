@@ -1,4 +1,4 @@
-import {  Heading,  Form, Button, FormLayout,TextField } from '@shopify/polaris'
+import {  Heading,  Form, Button, FormLayout,TextField, Card } from '@shopify/polaris'
 import React from 'react'
 import useStore from '../../store/store';
 
@@ -18,7 +18,7 @@ const CustomerInfo = () => {
   }
 
   return (
-    <>
+    <Card sectioned>
       <Heading>Customer info</Heading>
       <Form onSubmit={onSubmit}>
         <FormLayout>
@@ -33,7 +33,7 @@ const CustomerInfo = () => {
           <Button submit primary>Find</Button>
         </FormLayout>
       </Form>
-    </>   
+    </Card>   
   )
 }
 

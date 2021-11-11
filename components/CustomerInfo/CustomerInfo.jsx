@@ -4,7 +4,7 @@ import { GET_CUSTOMER  } from '../../graphql/queries';
 import { UPDATE_CUSTOMER_INFO } from '../../graphql/mutations'
 import useStore from '../../store/store';
 import CustomerAddress from '../CustomerAddress/CustomerAddress'
-import { Button, DisplayText, Form, TextField, Frame,Loading, InlineError } from '@shopify/polaris';
+import { Button, DisplayText, Form, TextField, Frame,Loading, InlineError, Card } from '@shopify/polaris';
 
 const CustomerInfo = () => {
 
@@ -44,7 +44,7 @@ const CustomerInfo = () => {
   const handleNumber = React.useCallback((value) => setNumber(value),[]);
 
   return (
-    <>
+    <Card sectioned>
       {loading && 
         <div style={{height: '100px'}}>
           <Frame>
@@ -93,7 +93,7 @@ const CustomerInfo = () => {
           )}
         </Form>
       </>}
-    </>
+    </Card>
   )
 }
 
