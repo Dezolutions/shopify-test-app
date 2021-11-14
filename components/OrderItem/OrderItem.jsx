@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Button, TextStyle, InlineError, TextField } from '@shopify/polaris'
+import { Button, TextStyle, InlineError, TextField, Frame, Loading } from '@shopify/polaris'
 import React from 'react'
 import { CREATE_REFUND, UPDATE_ORDER } from '../../graphql/mutations'
 import { GET_ORDERS } from '../../graphql/queries'
@@ -8,16 +8,16 @@ import styles from './orderitem.module.css'
 const OrderItem = ({id,name,refundable,email,netPaymentSet}) => {
 
   //states
-  const [email1, setEmail1] = React.useState(email);
+  const [emailData, setEmailData] = React.useState(email);
   
   //handlers
-  const handleChange = React.useCallback((newValue) => setEmail1(newValue), []);
+  const handleChange = React.useCallback((newValue) => setEmailData(newValue), []);
   
   //mutations
-  const [refundCreate, {error}] = useMutation(CREATE_REFUND,{refetchQueries:[
+  const [refundCreate, {error: deleteError, loading:deleteLoading}] = useMutation(CREATE_REFUND,{refetchQueries:[
     {query: GET_ORDERS}
   ]})
-  const [orderUpdate, {error1}] = useMutation(UPDATE_ORDER,{refetchQueries:[
+  const [orderUpdate, {error: updateError, loading:updateLoading}] = useMutation(UPDATE_ORDER,{refetchQueries:[
     {query: GET_ORDERS}
   ]})
 
@@ -32,24 +32,32 @@ const OrderItem = ({id,name,refundable,email,netPaymentSet}) => {
       orderId: id
     }
   }}})
-  const onUpdate = () => orderUpdate({variables: {input: {id:id, email: email1}}})
+  const onUpdate = () => orderUpdate({variables: {input: {id:id, email: emailData}}})
 
   return (
-    <div className={styles.orderItem}>
-      {error1 && <InlineError message={error1.message} fieldID="updateError"/>}
-      {error && <InlineError message={error.message} fieldID="refundError"/>}
-      <TextStyle variation="strong">{name}</TextStyle>
-      <div>
-        <TextField value={email1} autoComplete="off" type="email" onChange={handleChange} />
-        <Button onClick={onUpdate} primary>Update</Button>
+    <>
+      {(deleteLoading || updateLoading) && 
+        <div style={{height: '1px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
+      {deleteError && <InlineError message={deleteError.message} fieldID="updateError"/>}
+      {updateError && <InlineError message={updateError.message} fieldID="refundError"/>}
+      <div className={styles.orderItem}>
+        <TextStyle variation="strong">{name}</TextStyle>
+        <div>
+          <TextField value={emailData} autoComplete="off" type="email" onChange={handleChange} />
+          <Button onClick={onUpdate} primary>Update</Button>
+        </div>
+        <TextStyle 
+          variation={netPaymentSet.shopMoney.amount == 0 ? 'negative' : 'positive'}>
+            {netPaymentSet.shopMoney.amount}$
+        </TextStyle>
+        {refundable ? <Button onClick={onSubmit}>Refund</Button>: <p>refunded</p>}
       </div>
-      <TextStyle 
-        variation={netPaymentSet.shopMoney.amount == 0 ? 'negative' : 'positive'}>
-          {netPaymentSet.shopMoney.amount}$
-      </TextStyle>
-      {refundable ? <Button onClick={onSubmit}>Refund</Button>: <p>refunded</p>}
-      </div>
-    
+    </>
   )
 }
 

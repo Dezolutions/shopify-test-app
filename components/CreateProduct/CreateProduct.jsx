@@ -40,13 +40,13 @@ const CreateProduct = () => {
   return (
     <>
       {loading && 
-        <div style={{height: '100px'}}>
+        <div style={{height: '1px'}}>
           <Frame>
             <Loading />
           </Frame>
         </div>
       }
-      {error && <InlineError message={error.message} fieldID="customerInfoError"/>}
+      {error && <InlineError message={error.message} fieldID="createPoductError"/>}
       <Card sectioned>
         <Heading>New product</Heading>
         <Form>

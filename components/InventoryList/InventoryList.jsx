@@ -1,15 +1,22 @@
 import React from 'react'
 import {useQuery} from '@apollo/client'
 import { GET_INVENTORY } from '../../graphql/queries'
-import { Card, ResourceList, ResourceItem, Heading, InlineError } from '@shopify/polaris'
+import { Card, ResourceList, ResourceItem, Heading, InlineError, Frame, Loading } from '@shopify/polaris'
 import InventoryItem from '../InventoryItem/InventoryItem'
 
 const InventoryList = () => {
 
-  const {data,error} = useQuery(GET_INVENTORY)
+  const {data,error, loading} = useQuery(GET_INVENTORY)
 
   return (
     <>
+      {loading && 
+        <div style={{height: '1px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
       {error && <InlineError message={error.message} fieldID="InventoryQueryError"/>}
       <Heading>Inventory list</Heading>
       {data &&

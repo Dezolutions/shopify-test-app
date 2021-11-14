@@ -88,7 +88,45 @@ app.prepare().then(async () => {
 
   router.get("(/_next/static/.*)", handleRequest); // Static content is clear
   router.get("/_next/webpack-hmr", handleRequest); // Webpack content is clear
+
+  //MAIN PAGE(CUSTOMER)
   router.get("(.*)", async (ctx) => {
+    const shop = ctx.query.shop;
+
+    // This shop hasn't been seen yet, go through OAuth to create a session
+    if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+      ctx.redirect(`/auth?shop=${shop}`);
+    } else {
+      await handleRequest(ctx);
+    }
+  });
+
+  //PRODUCTS PAGE
+  router.get("(/products)", async (ctx) => {
+    const shop = ctx.query.shop;
+
+    // This shop hasn't been seen yet, go through OAuth to create a session
+    if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+      ctx.redirect(`/auth?shop=${shop}`);
+    } else {
+      await handleRequest(ctx);
+    }
+  });
+
+  //ORDERS PAGE
+  router.get("(/orders)", async (ctx) => {
+    const shop = ctx.query.shop;
+
+    // This shop hasn't been seen yet, go through OAuth to create a session
+    if (ACTIVE_SHOPIFY_SHOPS[shop] === undefined) {
+      ctx.redirect(`/auth?shop=${shop}`);
+    } else {
+      await handleRequest(ctx);
+    }
+  });
+
+  //INVENTORY PAGE
+  router.get("(/inventory)", async (ctx) => {
     const shop = ctx.query.shop;
 
     // This shop hasn't been seen yet, go through OAuth to create a session

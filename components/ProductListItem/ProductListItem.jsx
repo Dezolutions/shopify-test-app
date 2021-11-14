@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField,Button, Heading, Card, InlineError} from '@shopify/polaris'
+import { TextField,Button, Heading, Card, InlineError, Frame, Loading} from '@shopify/polaris'
 import {useMutation} from '@apollo/client'
 import { GET_PRODUCTS } from '../../graphql/queries'
 import { UPDATE_PRODUCT,DELETE_PRODUCT } from '../../graphql/mutations'
@@ -7,10 +7,10 @@ import { UPDATE_PRODUCT,DELETE_PRODUCT } from '../../graphql/mutations'
 const ProductListItem = ({id,handle,title, variants}) => {
   
   //mutations
-  const [productUpdate, {error:updateError}] = useMutation(UPDATE_PRODUCT,{refetchQueries:[
+  const [productUpdate, {error:updateError, loading:updateLoading}] = useMutation(UPDATE_PRODUCT,{refetchQueries:[
     {query: GET_PRODUCTS}
   ]});
-  const [productDelete, {error:deleteError}] = useMutation(DELETE_PRODUCT,{refetchQueries:[
+  const [productDelete, {error:deleteError, loading:deleteLoading}] = useMutation(DELETE_PRODUCT,{refetchQueries:[
     {query: GET_PRODUCTS}
   ]});
 
@@ -41,34 +41,43 @@ const ProductListItem = ({id,handle,title, variants}) => {
   
 
   return (
-    <Card sectioned>
+    <>
+      {(deleteLoading || updateLoading) && 
+        <div style={{height: '1px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
       {updateError && <InlineError message={updateError.message} fieldID="updateProductError"/>}
       {deleteError && <InlineError message={deleteError.message} fieldID="deleteProductError"/>}
-      <Heading>{title}</Heading>
-      <TextField 
-        type="text" 
-        placeholder="Enter a title please" 
-        label="Title" 
-        value={title1}
-        onChange={handleTitle}
-      />
-      <TextField 
-        type="text" 
-        placeholder="Enter a handle please" 
-        label="Handle" 
-        value={handle1}
-        onChange={handleHandle}
-      />
-      <TextField 
-        type="number" 
-        placeholder="Enter a price please" 
-        label="Price $" 
-        value={price1}
-        onChange={handlePrice}
-      />
-      <Button onClick={onSubmit} >Update</Button>
-      <Button onClick={onDeleteSubmit} primary >Delete</Button>
-    </Card>
+      <Card sectioned>
+        <Heading>{title}</Heading>
+        <TextField 
+          type="text" 
+          placeholder="Enter a title please" 
+          label="Title" 
+          value={title1}
+          onChange={handleTitle}
+        />
+        <TextField 
+          type="text" 
+          placeholder="Enter a handle please" 
+          label="Handle" 
+          value={handle1}
+          onChange={handleHandle}
+        />
+        <TextField 
+          type="number" 
+          placeholder="Enter a price please" 
+          label="Price $" 
+          value={price1}
+          onChange={handlePrice}
+        />
+        <Button onClick={onSubmit} >Update</Button>
+        <Button onClick={onDeleteSubmit} primary >Delete</Button>
+      </Card>
+    </>
   )
 }
 

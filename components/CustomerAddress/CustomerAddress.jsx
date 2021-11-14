@@ -1,4 +1,4 @@
-import { Button,TextField } from '@shopify/polaris'
+import { Button,TextField, InlineError, Frame, Loading } from '@shopify/polaris'
 import React from 'react'
 import {useMutation} from '@apollo/client'
 import { UPDATE_CUSTOMER_ADDRESS } from '../../graphql/mutations'
@@ -18,7 +18,7 @@ const CustomerAddress = ({city,address1, address2, country, id,customerId}) => {
   const handleCountry = React.useCallback((value) => setCountry(value),[]);
   
   //mutations
-  const [customerUpdateAddress] = useMutation(UPDATE_CUSTOMER_ADDRESS)
+  const [customerUpdateAddress, {error, loading}] = useMutation(UPDATE_CUSTOMER_ADDRESS)
 
   //submit functions
   const onSubmit = () => {
@@ -40,6 +40,14 @@ const CustomerAddress = ({city,address1, address2, country, id,customerId}) => {
 
   return (
     <div>
+      {loading  && 
+        <div style={{height: '1px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
+      {error && <InlineError message={error.message} fieldID="customerAddressError"/>}
       <TextField
         value={address1State}
         label="Address1"

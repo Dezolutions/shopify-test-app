@@ -1,5 +1,5 @@
 import { useMutation } from '@apollo/client'
-import { Button, Form, FormLayout, Heading, InlineError, TextField } from '@shopify/polaris'
+import { Button, Card, Form, FormLayout, Heading, InlineError, TextField, Frame, Loading } from '@shopify/polaris'
 import React from 'react'
 import { DRAFT_ORDER_CREATE } from '../../graphql/mutations'
 
@@ -18,7 +18,7 @@ const CreateOrder = () => {
   const handleQuantity = React.useCallback((newValue) => setQuantity(newValue), []);
 
   //mutations
-  const [draftOrderCreate, {error}] = useMutation(DRAFT_ORDER_CREATE)
+  const [draftOrderCreate, {error, loading}] = useMutation(DRAFT_ORDER_CREATE)
 
   //submit functions
   const onCreate = () => {
@@ -30,20 +30,33 @@ const CreateOrder = () => {
         }
       }
     })
+    setTitle('')
+    setEmail('')
+    setPrice('')
+    setQuantity(0)
   }
   
   return (
-    <Form onSubmit={onCreate}>
-      <FormLayout>
-        <Heading>Create draft order</Heading>
-        <TextField label="Title of product" type="text" value={title} onChange={handleTitle}/>
-        <TextField label="Email" type="email" value={email} onChange={handleEmail}/>
-        <TextField label="Price" type="number" value={price} onChange={handlePrice}/>
-        <TextField label="Quantity" type="number" value={quantity} onChange={handleQuantity}/>
-        <Button submit primary>Create</Button>
-        {error && <InlineError message={error.message} fieldID="CreateOrderError"/>}
-      </FormLayout>
-    </Form>
+    <Card sectioned>
+      {loading && 
+        <div style={{height: '1px'}}>
+          <Frame>
+            <Loading />
+          </Frame>
+        </div>
+      }
+      <Form onSubmit={onCreate}>
+        <FormLayout>
+          <Heading>Create draft order</Heading>
+          <TextField label="Title of product" type="text" value={title} onChange={handleTitle}/>
+          <TextField label="Email" type="email" value={email} onChange={handleEmail}/>
+          <TextField label="Price" type="number" value={price} onChange={handlePrice}/>
+          <TextField label="Quantity" type="number" value={quantity} onChange={handleQuantity}/>
+          <Button submit primary>Create</Button>
+          {error && <InlineError message={error.message} fieldID="CreateOrderError"/>}
+        </FormLayout>
+      </Form>
+    </Card>
   )
 }
 
