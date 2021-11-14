@@ -1,6 +1,6 @@
-import { Layout, Page } from "@shopify/polaris";
-import InventoryList from "../components/InventoryList/InventoryList";
+import { Page, Layout } from "@shopify/polaris";
 import React from "react";
+import InventoryList from "../components/InventoryList/InventoryList";
 
 const inventory = () => {
   return (

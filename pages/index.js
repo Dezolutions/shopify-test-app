@@ -11,8 +11,8 @@ const Index = () => {
       <Layout>
         <Layout.Section>
           <CustomerForm />
-          {email && <CustomerInfo />}
         </Layout.Section>
+        <Layout.Section>{email && <CustomerInfo />}</Layout.Section>
       </Layout>
     </Page>
   );

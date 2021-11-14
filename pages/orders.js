@@ -3,10 +3,10 @@ import React from "react";
 import CreateOrder from "../components/CreateOrder/CreateOrder";
 import OrderList from "../components/OrderList/OrderList";
 
-const orders = () => {
+const Orders = () => {
   return (
     <Page>
-      <Layout sectioned>
+      <Layout>
         <Layout.Section>
           <CreateOrder />
         </Layout.Section>
@@ -18,4 +18,4 @@ const orders = () => {
   );
 };
 
-export default orders;
+export default Orders;

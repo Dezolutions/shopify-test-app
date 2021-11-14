@@ -1,12 +1,12 @@
-import { Layout, Page } from "@shopify/polaris";
 import React from "react";
 import ProductList from "../components/ProductList/ProductList";
 import CreateProduct from "../components/CreateProduct/CreateProduct";
+import { Layout, Page } from "@shopify/polaris";
 
-const products = () => {
+const Products = () => {
   return (
     <Page>
-      <Layout sectioned>
+      <Layout>
         <Layout.Section>
           <CreateProduct />
         </Layout.Section>
@@ -18,4 +18,4 @@ const products = () => {
   );
 };
 
-export default products;
+export default Products;
