@@ -8,21 +8,30 @@ import { Button, DisplayText, Form, TextField, Frame,Loading, InlineError, Card 
 
 const CustomerInfo = () => {
 
+   //states
+   const [customerId, setCustomerId] = React.useState('')
+   const [name, setName] = React.useState('')
+   const [lastName, setLastName] = React.useState('')
+   const [email, setEmail] = React.useState('')
+   const [number, setNumber] = React.useState('')
+   const [infoError, setInfoError] = React.useState('')
+
   //get email for query
   const emailData = useStore(state => state.email)
 
   //queries and mutations
-  const { loading, error, data } = useQuery(GET_CUSTOMER, {variables:{email: emailData}});
+  const { loading, error, data } = useQuery(GET_CUSTOMER, {
+    variables:{email: emailData},
+    onCompleted: data => {
+      if(data.customers.edges.length != 0){
+        setInfoError('')
+      }
+      else{
+        setInfoError('There is no customer with this email')
+      }
+    }
+  });
   const [customerUpdate, { error:mutationError, loading: updateLoading }] = useMutation(UPDATE_CUSTOMER_INFO)
-
-  //states
-  const customerId = data?.customers.edges[0].node.id || ''
-  const [name, setName] = React.useState('')
-  const [lastName, setLastName] = React.useState('')
-  const [email, setEmail] = React.useState('')
-  const [number, setNumber] = React.useState('')
-
-  
 
   //submit functions
   const onSubmit = () => {
@@ -31,10 +40,11 @@ const CustomerInfo = () => {
 
   //change state by received data
   React.useEffect(() => {
-    setName(data?.customers.edges[0].node.firstName)
-    setLastName(data?.customers.edges[0].node.lastName)
-    setEmail(data?.customers.edges[0].node.email)
-    setNumber(data?.customers.edges[0].node.phone)
+    setCustomerId(data?.customers.edges[0]?.node.id)
+    setName(data?.customers.edges[0]?.node.firstName)
+    setLastName(data?.customers.edges[0]?.node.lastName)
+    setEmail(data?.customers.edges[0]?.node.email)
+    setNumber(data?.customers.edges[0]?.node.phone)
   },[data])
 
   //state handlers
@@ -52,9 +62,10 @@ const CustomerInfo = () => {
           </Frame>
         </div>
       }
+      {infoError && <InlineError message={infoError} fieldID="customerQueryInfoError"/>}
       {error && <InlineError message={error.message} fieldID="customerQueryInfoError"/>}
       {mutationError && <InlineError message={mutationError.message} fieldID="customerMutInfoError"/>}
-      {data &&
+      {data?.customers.edges[0]?.node &&
         <>
           <Card sectioned>
             <DisplayText size="small">Result:</DisplayText>
@@ -96,7 +107,7 @@ const CustomerInfo = () => {
                   <CustomerAddress key={item.id} customerId={customerId} {...item}/>
                 )}
           </Card>
-        </>
+        </>     
       }
     </>
   )

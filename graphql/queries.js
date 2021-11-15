@@ -2,7 +2,7 @@ import { gql } from "@apollo/client";
 
 export const GET_CUSTOMER = gql`
   query getCustomer($email: String) {
-    customers(first: 20, query: $email) {
+    customers(first: 1, query: $email) {
       edges {
         node {
           id

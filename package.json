@@ -47,7 +47,7 @@
     "redux": "^4.1.1",
     "redux-thunk": "^2.3.0",
     "webpack": "^4.44.1",
-    "zustand": "^3.5.13"
+    "zustand": "^3.6.5"
   },
   "devDependencies": {
     "@babel/plugin-transform-runtime": "^7.12.10",

@@ -142,7 +142,19 @@ export const DRAFT_ORDER_CREATE = gql`
     }
   }
 `;
-
+export const DRAFT_ORDER_COMPLETE = gql`
+  mutation draftOrderComplete($id: ID!) {
+    draftOrderComplete(id: $id) {
+      userErrors {
+        field
+        message
+      }
+      draftOrder {
+        id
+      }
+    }
+  }
+`
 export const UPDATE_INVENTORY = gql`
   mutation inventoryItemUpdate($id: ID!, $input: InventoryItemUpdateInput!) {
     inventoryItemUpdate(id: $id, input: $input) {

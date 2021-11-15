@@ -6,23 +6,35 @@ import { UPDATE_PRODUCT,DELETE_PRODUCT } from '../../graphql/mutations'
 
 const ProductListItem = ({id,handle,title, variants}) => {
   
-  //mutations
-  const [productUpdate, {error:updateError, loading:updateLoading}] = useMutation(UPDATE_PRODUCT,{refetchQueries:[
-    {query: GET_PRODUCTS}
-  ]});
-  const [productDelete, {error:deleteError, loading:deleteLoading}] = useMutation(DELETE_PRODUCT,{refetchQueries:[
-    {query: GET_PRODUCTS}
-  ]});
-
   //states
   const [title1, setTitle] = React.useState(title)
   const [handle1, setHandle] = React.useState(handle)
   const [price1, setPrice] = React.useState(variants.edges[0].node.price)
+  const [updateError, setUpdateError] = React.useState('')
 
   //handlers
   const handleTitle = React.useCallback(value => setTitle(value),[])
   const handleHandle = React.useCallback(value => setHandle(value),[])
   const handlePrice = React.useCallback(value => setPrice(value),[])
+
+  //mutations
+  const [productUpdate, {loading:updateLoading}] = useMutation(UPDATE_PRODUCT,{
+    refetchQueries:[
+      {query: GET_PRODUCTS}
+    ],
+    onCompleted: data => {
+      if(data.productUpdate.userErrors[0]?.message){
+        setUpdateError(data.productUpdate.userErrors[0].message)
+      }
+      else{
+        setUpdateError('')
+      }
+    }
+  });
+  const [productDelete, {error:deleteError, loading:deleteLoading}] = useMutation(DELETE_PRODUCT,{refetchQueries:[
+    {query: GET_PRODUCTS}
+  ]});
+
 
   //submit functions
   const onSubmit = () => {
@@ -32,7 +44,7 @@ const ProductListItem = ({id,handle,title, variants}) => {
         title: title1,
         handle: handle1,
         variants:{
-          price: price1
+          price: +price1
         }
       }
     }})
@@ -49,9 +61,9 @@ const ProductListItem = ({id,handle,title, variants}) => {
           </Frame>
         </div>
       }
-      {updateError && <InlineError message={updateError.message} fieldID="updateProductError"/>}
-      {deleteError && <InlineError message={deleteError.message} fieldID="deleteProductError"/>}
       <Card sectioned>
+      {deleteError && <InlineError message={deleteError.message} fieldID="deleteProductError"/>}
+      {updateError && <InlineError message={updateError} fieldID="updateProductError"/>}
         <Heading>{title}</Heading>
         <TextField 
           type="text" 
