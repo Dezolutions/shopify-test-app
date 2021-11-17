@@ -3,3 +3,13 @@
   justify-content: space-between;
   align-items: center;
 }
+
+@media screen and (max-width: 600px) {
+  .orderItem {
+    flex-direction: column;
+    text-align: center;
+  }
+  .orderItem > * {
+    margin: 5px 0;
+  }
+}
