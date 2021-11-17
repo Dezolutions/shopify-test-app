@@ -72,6 +72,16 @@ export const GET_INVENTORY = gql`
           id
           sku
           tracked
+          variant {
+            inventoryQuantity
+          }
+          inventoryLevels(first: 5) {
+            edges {
+              node {
+                id
+              }
+            }
+          }
         }
       }
     }

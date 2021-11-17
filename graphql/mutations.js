@@ -154,7 +154,7 @@ export const DRAFT_ORDER_COMPLETE = gql`
       }
     }
   }
-`
+`;
 export const UPDATE_INVENTORY = gql`
   mutation inventoryItemUpdate($id: ID!, $input: InventoryItemUpdateInput!) {
     inventoryItemUpdate(id: $id, input: $input) {
@@ -164,6 +164,21 @@ export const UPDATE_INVENTORY = gql`
       }
       inventoryItem {
         id
+      }
+    }
+  }
+`;
+
+export const CHANGE_INVENTORY_ITEM_QUANTITY = gql`
+  mutation inventoryAdjustQuantity($input: InventoryAdjustQuantityInput!) {
+    inventoryAdjustQuantity(input: $input) {
+      userErrors {
+        field
+        message
+      }
+      inventoryLevel {
+        id
+        updatedAt
       }
     }
   }

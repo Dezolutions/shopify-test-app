@@ -1,0 +1,13 @@
+.counter {
+  margin: 7px 0;
+}
+
+.btn {
+  display: inline-block;
+  margin-left: 10px;
+}
+
+.counterText {
+  display: inline-block;
+  margin: 0 10px;
+}

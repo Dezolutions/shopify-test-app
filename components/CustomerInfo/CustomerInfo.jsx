@@ -62,7 +62,7 @@ const CustomerInfo = () => {
           </Frame>
         </div>
       }
-      {infoError && <InlineError message={infoError} fieldID="customerQueryInfoError"/>}
+      {infoError && <InlineError message={infoError} fieldID="customerInfoError"/>}
       {error && <InlineError message={error.message} fieldID="customerQueryInfoError"/>}
       {mutationError && <InlineError message={mutationError.message} fieldID="customerMutInfoError"/>}
       {data?.customers.edges[0]?.node &&

@@ -1,23 +1,28 @@
 import { useMutation } from '@apollo/client'
-import { Button, Card, Form, FormLayout, Heading, InlineError, TextField, Frame, Loading } from '@shopify/polaris'
+import { Button, Card, Form, FormLayout, Heading, InlineError, TextField, Frame, Loading, EmptyState, List, ResourceList, ResourceItem } from '@shopify/polaris'
+import { ResourcePicker, TitleBar } from '@shopify/app-bridge-react';
 import React from 'react'
 import { DRAFT_ORDER_COMPLETE, DRAFT_ORDER_CREATE } from '../../graphql/mutations'
 import { GET_ORDERS } from '../../graphql/queries'
+import useStore from '../../store/store';
+import OrderProduct from '../OrderProduct/OrderProduct';
 
 const CreateOrder = () => {
 
+  //store
+  const [products,setProducts] = useStore(state => [state.products, state.setProducts])
+
   //states
-  const [title, setTitle] = React.useState('');
+  const [open, setOpen] = React.useState(false);
   const [email, setEmail] = React.useState('');
-  const [price, setPrice] = React.useState(0);
-  const [quantity, setQuantity] = React.useState(0);
   const [createError, setCreateError] = React.useState('');
-  
+
   //handlers
-  const handleTitle = React.useCallback((newValue) => setTitle(newValue), []);
   const handleEmail = React.useCallback((newValue) => setEmail(newValue), []);
-  const handlePrice = React.useCallback((newValue) => setPrice(newValue), []);
-  const handleQuantity = React.useCallback((newValue) => setQuantity(newValue), []);
+  const handleSelection = (resources) => {
+    setOpen(false);
+    setProducts(resources.selection)
+  };
 
   //mutations
   const [draftOrderComplete, {error:errorComplete}] = useMutation(DRAFT_ORDER_COMPLETE, {refetchQueries: [
@@ -35,11 +40,9 @@ const CreateOrder = () => {
             id: order.draftOrder?.id
           }
         })
-        setTitle('')
         setEmail('')
-        setPrice('')
-        setQuantity(0)
         setCreateError('')
+        setProducts([])
       } 
         
     }
@@ -51,7 +54,7 @@ const CreateOrder = () => {
       variables: {
         input : {
           email: email, 
-          lineItems: { title: title, quantity: +quantity, originalUnitPrice: price }
+          lineItems: products.map(product => ({quantity: product.orderQuantity || 1, variantId: product.variants[0].id}))
         }
       }
     })
@@ -69,11 +72,40 @@ const CreateOrder = () => {
       <Form onSubmit={onCreate}>
         <FormLayout>
           <Heading>Create order</Heading>
-          <TextField label="Title of product" type="text" value={title} onChange={handleTitle}/>
-          <TextField label="Email" type="email" value={email} onChange={handleEmail}/>
-          <TextField label="Price" type="number" value={price} onChange={handlePrice}/>
-          <TextField label="Quantity" type="number" value={quantity} onChange={handleQuantity}/>
-          <Button submit primary>Create</Button>
+          {products.length 
+            ? <ResourceList
+                items={products}
+                renderItem={item => {
+                  return (
+                    <ResourceItem id={item.id}>
+                      <OrderProduct {...item}/>
+                    </ResourceItem>
+                  )
+                }}
+              />
+            : <EmptyState
+                heading="Select products for your order"
+                action={{
+                  content: 'Select products',
+                  onAction: () => setOpen(true),
+                }}
+              ></EmptyState>
+          }
+          <TitleBar
+            primaryAction={{
+              content: 'Select products',
+              onAction: () => setOpen(true),
+            }}
+          />
+          <ResourcePicker
+            resourceType="Product"
+            showVariants={false}
+            open={open}
+            onSelection={(resources) => handleSelection(resources)}
+            onCancel={() => setOpen(false)}
+          />
+          <TextField label="Customer email(optional)" type="email" value={email} onChange={handleEmail}/>
+          <Button submit primary>Create Order</Button>
           {error && <InlineError message={error.message} fieldID="CreateOrderError"/>}
           {createError && <InlineError message={createError} fieldID="CreateOrderError1"/>}
           {errorComplete && <InlineError message={errorComplete.message} fieldID="CompleteOrderError"/>}
