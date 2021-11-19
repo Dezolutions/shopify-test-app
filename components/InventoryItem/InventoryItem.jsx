@@ -8,7 +8,7 @@ import styles from './inventoryItem.module.css'
 const InventoryItem = ({id,sku,tracked, inventoryLevels,variant}) => {
 
   //states
-  const [count, setCount] = React.useState(variant.inventoryQuantity)
+  const [count, setCount] = React.useState(1)
 
   //handlers
   const onUp = () => setCount(prev => prev + 1)
@@ -46,7 +46,7 @@ const InventoryItem = ({id,sku,tracked, inventoryLevels,variant}) => {
           <p className={styles.counterText}><TextStyle variation={count > 0 ? 'positive' : 'negative'}>{count}</TextStyle></p>
           <Button onClick={onDown}>-</Button>
         </div>
-        <Button onClick={onChange}>{count > 0 ? 'Add' : 'Remove'} quantity</Button>
+        <Button onClick={onChange}>Change quantity</Button>
       </>}
       {tracked 
         ? <div className={styles.btn}><Button primary onClick={onUntrack}>Untrack quantity</Button></div>
